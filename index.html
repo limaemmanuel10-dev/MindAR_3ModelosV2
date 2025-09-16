@@ -1,0 +1,84 @@
+  <html>
+  <head>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      body { margin: 0; overflow: hidden; }
+      #ui {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 20px;
+        z-index: 10;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: none;
+        background: #333;
+        color: white;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Controles en HTML -->
+    <div id="ui">
+      <button id="btn-left">⟲ Girar Izquierda</button>
+      <button id="btn-right">⟳ Girar Derecha</button>
+    </div>
+
+    <!-- Escena AR -->
+     <a-scene mindar-image="imageTargetSrc: ./targets.mind;" vr-mode-ui="enabled: false">
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    
+     <!-- Tracker 1 (imagen 1 del multi.mind) -->
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-entity id="model1" gltf-model="./MotosierraEAAL.glb" scale="0.5 0.5 0.5" rotation="0 0 0"></a-entity>
+      </a-entity>
+      
+      <!-- Tracker 2 (imagen 2 del multi.mind) -->
+      <a-entity mindar-image-target="targetIndex: 1">
+        <a-entity id="model2" gltf-model="./Nave8EAAL_LowPoly.glb" scale="0.5 0.5 0.5" rotation="0 0 0"></a-entity>
+      </a-entity>
+
+
+    <script>
+      const model1 = document.querySelector("#model1");
+      const model2 = document.querySelector("#model2");
+      const btnLeft = document.querySelector("#btn-left");
+      const btnRight = document.querySelector("#btn-right");
+
+      let rotationY1 = 0;
+      let rotationY2 = 0;
+
+      btnLeft.addEventListener("click", () => {
+      if (model1.object3D.visible) {  // si el target 1 está activo
+        rotationY1 -= 15;
+        model1.setAttribute("rotation", `0 ${rotationY1} 0`);
+      }
+      if (model2.object3D.visible) {  // si el target 2 está activo
+        rotationY2 -= 15;
+        model2.setAttribute("rotation", `0 ${rotationY2} 0`);
+      }
+    });
+
+    btnRight.addEventListener("click", () => {
+      if (model1.object3D.visible) {
+        rotationY1 += 15;
+        model1.setAttribute("rotation", `0 ${rotationY1} 0`);
+      }
+      if (model2.object3D.visible) {
+        rotationY2 += 15;
+        model2.setAttribute("rotation", `0 ${rotationY2} 0`);
+      }
+    });
+    </script>
+  </body>
+</html>
